@@ -44,44 +44,37 @@ class EmpresaController {
     }
     
 
+  
     public function show($id) {
         include_once 'Database.php';
     
-        // Crie uma nova instância da classe Database
         $database = new Database();
         $conn = $database->getConnection();
     
-        // Verifique se a conexão foi bem-sucedida
         if ($conn) {
             try {
-                // Prepare a declaração de seleção
+    
                 $stmt = $conn->prepare("SELECT * FROM empresas WHERE id = :id");
-    
-                // Bind o valor do ID
                 $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    
-                // Execute a declaração
                 $stmt->execute();
     
-                // Obtenha os resultados
                 $empresa = $stmt->fetch(PDO::FETCH_ASSOC);
     
                 if ($empresa) {
-                    // A empresa foi encontrada, você pode fazer algo com os dados
-                    print_r($empresa);
+                    // Retorna os dados como JSON
+                    header('Content-Type: application/json');
+                    echo json_encode($empresa);
                 } else {
-                    // A empresa com o ID fornecido não foi encontrada
-                    echo " *****Empresa não encontrada.";
+                    echo json_encode(array("mensagem" => "Empresa não encontrada."));
                 }
     
             } catch (PDOException $e) {
-                echo "Erro: " . $e->getMessage();
+                echo json_encode(array("mensagem" => "Erro: " . $e->getMessage()));
             }
         } else {
-            echo "Erro na conexão com o banco de dados.";
+            echo json_encode(array("mensagem" => "Erro na conexão com o banco de dados."));
         }
     }
-    
 
     public function create() {
         // Receber os dados da empresa do corpo da requisição (JSON)
