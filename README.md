@@ -25,8 +25,10 @@ A API oferece os seguintes endpoints principais:
         PUT /api/participantes/{id}: Atualiza os detalhes de um participante existente.
         DELETE /api/participantes/{id}: Exclui um participante existente.
 
-        Considerações Importantes :
-          Não foi feito validaçao do CNPJ nesse cadastro(Algoritmo).Apenas nao permite que seja duplicado.
+        
+
+ Considerações Importantes :
+     Não foi feito validaçao do CNPJ nesse cadastro(Algoritmo).Apenas nao permite que seja duplicado.
 
 Como Funciona
 
