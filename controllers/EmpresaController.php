@@ -42,10 +42,10 @@ class EmpresaController {
             echo json_encode(array('message' => 'Erro na conexão com o banco de dados.'));
         }
     }
-    
 
-  
+    
     public function show($id) {
+        
         include_once 'Database.php';
     
         $database = new Database();
