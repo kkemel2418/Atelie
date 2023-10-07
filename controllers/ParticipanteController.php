@@ -6,29 +6,22 @@ class ParticipanteController {
 
         include_once 'Database.php';
     
-        // Crie uma nova instância da classe Database
         $database = new Database();
         $conn = $database->getConnection();
     
-        // Verifique se a conexão foi bem-sucedida
         if ($conn) {
             try {
-                // Prepare a declaração de seleção
+             
                 $stmt = $conn->prepare("SELECT * FROM participantes");
-    
-                // Execute a declaração
                 $stmt->execute();
     
-                // Obtenha os resultados como um array associativo
                 $participantes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-                // Se houver participantes encontrados
                 if ($participantes) {
-                    // Retorne os participantes como JSON
+                    
                     header('Content-Type: application/json');
                     echo json_encode($participantes);
                 } else {
-                    // Se não houver participantes, retorne uma mensagem adequada
+                    
                     header('HTTP/1.1 404 Not Found');
                     echo json_encode(array('message' => 'Nenhum participante encontrado.'));
                 }
@@ -76,63 +69,56 @@ class ParticipanteController {
     }
 
     public function create() {
-        // Receber os dados do participante do corpo da requisição (JSON)
+     
         $requestData = json_decode(file_get_contents('php://input'), true);
     
-        // Verificar se os dados foram recebidos corretamente
+
         if ($requestData && !empty($requestData['cpf']) && !empty($requestData['nome_completo'])
                          && !empty($requestData['email']) && !empty($requestData['campanha_id'])) {
     
             include_once 'Database.php';
     
-            // Crie uma nova instância da classe Database
             $database = new Database();
             $conn = $database->getConnection();
-    
-            // Verifique se a conexão foi bem-sucedida
+
             if ($conn) {
                 try {
-                    // Verificar se o participante já está cadastrado na campanha
                     if ($this->checkIfParticipanteExists($requestData['cpf'], $requestData['campanha_id'])) {
                         header('HTTP/1.1 409 Conflict');
                         echo json_encode(array('message' => 'Este participante já está cadastrado nesta campanha'));
-                        return; // Retorna para evitar a inserção
+                        return; 
                     }
     
-                    // Prepare a declaração de inserção
                     $stmt = $conn->prepare("INSERT INTO participantes (cpf, nome_completo, email, campanha_id) 
                                            VALUES (:cpf, :nome_completo, :email, :campanha_id )");
     
-                    // Bind os valores
                     $stmt->bindParam(':cpf', $requestData['cpf']);
                     $stmt->bindParam(':nome_completo', $requestData['nome_completo']);
                     $stmt->bindParam(':email', $requestData['email']);
                     $stmt->bindParam(':campanha_id', $requestData['campanha_id']);
     
-                    // Execute a declaração
                     if ($stmt->execute()) {
-                        // Participante cadastrado com sucesso
+    
                         echo json_encode(array('message' => 'Participante cadastrado com sucesso'));
                     } else {
-                        // Erro ao cadastrar o participante
+                    
                         echo json_encode(array('message' => 'Erro ao cadastrar o participante'));
                     }
                 } catch (PDOException $e) {
-                    // Erro ao cadastrar o participante
+            
                     echo json_encode(array('message' => 'Erro: ' . $e->getMessage()));
                 }
             } else {
-                // Erro na conexão com o banco de dados
+        
                 echo json_encode(array('message' => 'Erro na conexão com o banco de dados'));
             }
     
         } else {
-            // Dados inválidos ou faltando
+          
             echo json_encode(array('message' => 'Verifique se os dados estão completos'));
         }
     }
     
-
     public function update($id, $requestData) {
         include_once 'Database.php';
 
@@ -210,8 +196,6 @@ public function delete($id) {
         echo json_encode($response);
     }
 }
-
-
     public function checkIfEmpresaExists($id) {
         include_once 'Database.php';
     
@@ -228,11 +212,9 @@ public function delete($id) {
     
                 return $result > 0;
             } catch (PDOException $e) {
-                // Trate o erro aqui, se necessário
                 return false;
             }
         } else {
-            // Trate o erro de conexão aqui, se necessário
             return false;
         }
     }
@@ -254,11 +236,10 @@ public function delete($id) {
     
                 return $result > 0;
             } catch (PDOException $e) {
-                // Trate o erro aqui, se necessário
+            
                 return false;
             }
         } else {
-            // Trate o erro de conexão aqui, se necessário
             return false;
         }
     }
