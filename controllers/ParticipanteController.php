@@ -156,6 +156,7 @@ class ParticipanteController {
             echo json_encode(array('message' => 'Erro na conexão com o banco de dados'));
         }
     }
+    
 public function delete($id) {
     include_once 'Database.php';
 
