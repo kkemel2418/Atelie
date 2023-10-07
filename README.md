@@ -28,7 +28,8 @@ A API oferece os seguintes endpoints principais:
         
 
 # Considerações Importantes !
-     Não foi feito validaçao do CNPJ nesse cadastro(Algoritmo).Apenas nao permite que seja duplicado.
+     Não foi feito validação do CNPJ pelo algoritmo(Por uma questão de tempo).
+     Apenas nao permite que seja duplicado.
 
 Como Funciona
 
